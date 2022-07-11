@@ -1,77 +1,42 @@
-	package com.gl.StudentRegistration.service;
-
-import com.gl.StudentRegistration.entity.Student;
+package com.gl.StudentRegistration.service;
 
 import java.util.List;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+import com.gl.StudentRegistration.entity.Student;
+import com.gl.StudentRegistration.repository.StudentRepository;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class StudentServicesImpl implements StudentServices {
 
-	private SessionFactory sessionFactory;
-	private Session session;
-
-	// Constructor to start sessionFactory
 	@Autowired
-	StudentServicesImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-		try {
-			session = sessionFactory.getCurrentSession();
-		} catch (HibernateException e) {
-			session = sessionFactory.openSession();
-		}
-	}
-
-	@Transactional
+	private StudentRepository studentRepository;
+	
+	@Override
 	public List<Student> findAll() {
-
-		Transaction trans = session.beginTransaction();
-
-		List<Student> students = session.createQuery("from Student",Student.class).list();
-
-		trans.commit();
-
+		List<Student> students = studentRepository.findAll();
 		return students;
 	}
 
-	@Transactional
+	@Override
 	public Student findById(int Id) {
-		Student student = new Student();
-
-		Transaction trans = session.beginTransaction();
-
-		student = session.get(Student.class, Id);
-
-		trans.commit();
-
+		Student student = studentRepository.findById(Id).get();
 		return student;
 	}
 
-	@Transactional
+	@Override
 	public void save(Student individual) {
-		Transaction trans = session.beginTransaction();
-		session.saveOrUpdate(individual);
-		trans.commit();
-
+		studentRepository.save(individual);
+		
 	}
 
 	@Override
 	public void deleteById(int Id) {
-		Student student = new Student();
+		studentRepository.deleteById(Id);
 		
-		Transaction trans = session.beginTransaction();
-
-		student = session.get(Student.class, Id);
-		
-		session.delete(student);
-		trans.commit();
-
 	}
 
 }

@@ -23,7 +23,7 @@ public class StudentController {
 	@Autowired
 	private StudentServices studentservice;
 
-	@RequestMapping("/list") //"/list"
+	@RequestMapping("/list") // "/list"
 	public String listStudents(Model theModel) {
 
 		System.out.println("Request to list all students received");
@@ -76,21 +76,18 @@ public class StudentController {
 	public String delete(@RequestParam("id") int Id) {
 		studentservice.deleteById(Id);
 		return "redirect:/students/list";
-		
 
 	}
-	
+
 	@RequestMapping(value = "/403")
 	public ModelAndView accesssDenied(Principal user) {
 
 		ModelAndView model = new ModelAndView();
 
 		if (user != null) {
-			model.addObject("msg", "Hi " + user.getName() 
-			+ ", you do not have permission to access this page!");
+			model.addObject("msg", "Hi " + user.getName() + ", you do not have permission to access this page!");
 		} else {
-			model.addObject("msg", 
-			"You do not have permission to access this page!");
+			model.addObject("msg", "You do not have permission to access this page!");
 		}
 
 		model.setViewName("403");
